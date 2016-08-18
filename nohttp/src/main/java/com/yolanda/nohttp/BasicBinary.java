@@ -32,7 +32,6 @@ import java.net.URLConnection;
  * All the methods are called in Son thread.
  * </p>
  * Created in Oct 17, 2015 12:40:54 PM.
- *
  * @author Yan Zhenjie.
  */
 public abstract class BasicBinary implements Binary, Startable, Finishable {
@@ -58,8 +57,7 @@ public abstract class BasicBinary implements Binary, Startable, Finishable {
 
     /**
      * To monitor file upload progress.
-     *
-     * @param what             in {@link OnUploadListener} will return to you.
+     * @param what in {@link OnUploadListener} will return to you.
      * @param mProgressHandler {@link OnUploadListener}.
      */
     public void setUploadListener(int what, OnUploadListener mProgressHandler) {
@@ -102,7 +100,7 @@ public abstract class BasicBinary implements Binary, Startable, Finishable {
                         int progress = (int) (hasUpCount * 100 / totalLength);
                         if ((0 == progress % 3 || 0 == progress % 5 || 0 == progress % 7) && oldProgress != progress) {
                             oldProgress = progress;
-                            postProgress(oldProgress);
+                            postProgress(oldProgress, hasUpCount, totalLength);
                         }
                     }
                 }
@@ -143,12 +141,13 @@ public abstract class BasicBinary implements Binary, Startable, Finishable {
 
     /**
      * The update task schedule.
-     *
      * @param progress progress.
+     * @param currentSize currentSize.
+     * @param totalSize totalSize.
      */
-    protected void postProgress(int progress) {
+    protected void postProgress(int progress, long currentSize, long totalSize) {
         UploadPoster progressPoster = new UploadPoster(what, mUploadListener);
-        progressPoster.progress(progress);
+        progressPoster.progress(progress, currentSize, totalSize);
         PosterHandler.getInstance().post(progressPoster);
     }
 
@@ -163,7 +162,6 @@ public abstract class BasicBinary implements Binary, Startable, Finishable {
 
     /**
      * Error notification tasks.
-     *
      * @param e exception.
      */
     protected void postError(Exception e) {
@@ -228,6 +226,8 @@ public abstract class BasicBinary implements Binary, Startable, Finishable {
         public static final int ON_ERROR = 4;
 
         private int progress;
+        private long currentSize;
+        private long totalSize;
         private Exception exception;
 
         public UploadPoster(int what, OnUploadListener onUploadListener) {
@@ -243,9 +243,11 @@ public abstract class BasicBinary implements Binary, Startable, Finishable {
             this.command = ON_CANCEL;
         }
 
-        public void progress(int progress) {
+        public void progress(int progress, long currentSize, long totalSize) {
             this.command = ON_PROGRESS;
             this.progress = progress;
+            this.currentSize = currentSize;
+            this.totalSize = totalSize;
         }
 
         public void finish() {
@@ -265,7 +267,7 @@ public abstract class BasicBinary implements Binary, Startable, Finishable {
                 else if (command == ON_FINISH)
                     mOnUploadListener.onFinish(what);
                 else if (command == ON_PROGRESS)
-                    mOnUploadListener.onProgress(what, progress);
+                    mOnUploadListener.onProgress(what, progress, currentSize, totalSize);
                 else if (command == ON_CANCEL)
                     mOnUploadListener.onCancel(what);
                 else if (command == ON_ERROR)

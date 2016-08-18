@@ -17,14 +17,12 @@ package com.yolanda.nohttp;
 
 /**
  * Created in Jan 29, 2016 10:56:37 AM.
- *
  * @author Yan Zhenjie.
  */
 public interface OnUploadListener {
 
     /**
      * At the start of the upload is invoked.
-     *
      * @param what what of {@link FileBinary#setUploadListener(int, OnUploadListener)}.
      * @see FileBinary#setUploadListener(int, OnUploadListener)
      */
@@ -32,7 +30,6 @@ public interface OnUploadListener {
 
     /**
      * Called when the upload was cancelled.
-     *
      * @param what what of {@link FileBinary#setUploadListener(int, OnUploadListener)}.
      * @see FileBinary#setUploadListener(int, OnUploadListener)
      */
@@ -40,16 +37,15 @@ public interface OnUploadListener {
 
     /**
      * Invoked when the upload progress changes.
-     *
-     * @param what     what of {@link FileBinary#setUploadListener(int, OnUploadListener)}.
+     * @param what what of {@link FileBinary#setUploadListener(int, OnUploadListener)}.
      * @param progress progress
-     * @see FileBinary#setUploadListener(int, OnUploadListener)
+     * @param currentSize
+     * @param totalSize @see FileBinary#setUploadListener(int, OnUploadListener)
      */
-    void onProgress(int what, int progress);
+    void onProgress(int what, int progress, long currentSize, long totalSize);
 
     /**
      * Upload is complete is invoked.
-     *
      * @param what what of {@link FileBinary#setUploadListener(int, OnUploadListener)}.
      * @see FileBinary#setUploadListener(int, OnUploadListener)
      */
@@ -57,8 +53,7 @@ public interface OnUploadListener {
 
     /**
      * Upload error is called.
-     *
-     * @param what      what of {@link FileBinary#setUploadListener(int, OnUploadListener)}. * @param exception upload is called when an error occurs.
+     * @param what what of {@link FileBinary#setUploadListener(int, OnUploadListener)}. * @param exception upload is called when an error occurs.
      * @param exception error type.
      * @see BasicBinary#setUploadListener(int, OnUploadListener)
      */
