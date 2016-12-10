@@ -191,6 +191,9 @@ class DownloadDispatcher extends Thread {
 
         @Override
         public void run() {
+            if (downloadListener == null){
+                return;
+            }
             switch (command) {
                 case COMMAND_START:
                     downloadListener.onStart(what, isResume, beforeLength, responseHeaders, allCount);
