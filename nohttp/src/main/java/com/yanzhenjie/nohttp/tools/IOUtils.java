@@ -366,7 +366,11 @@ public class IOUtils {
      * @return space size.
      */
     public static long getDirSize(String path) {
+        try {
         StatFs stat = new StatFs(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (Build.VERSION.SDK_INT >= AndroidVersion.JELLY_BEAN_MR2)
             return getStatFsSize(stat, "getBlockSizeLong", "getAvailableBlocksLong");
         else
