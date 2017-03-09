@@ -26,6 +26,9 @@ import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * <p>RecyclerView的List形式Title+SubTitle的适配器。</p>
  * Created in Jan 28, 2016 5:04:03 PM.
@@ -46,7 +49,8 @@ public class RecyclerListMultiAdapter extends BaseAdapter<RecyclerListMultiAdapt
 
     @Override
     public TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new TextViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_title_subtitle, parent, false));
+        return new TextViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout
+                .item_list_title_subtitle, parent, false));
     }
 
     @Override
@@ -55,14 +59,17 @@ public class RecyclerListMultiAdapter extends BaseAdapter<RecyclerListMultiAdapt
     }
 
     public class TextViewHolder extends BaseAdapter.BaseViewHolder implements View.OnClickListener {
-        private TextView mTextView;
-        private TextView mTextViewSub;
+
+        @BindView(R.id.item_list_title)
+        TextView mTextView;
+
+        @BindView(R.id.item_list_title_sub)
+        TextView mTextViewSub;
 
         public TextViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-            mTextView = (TextView) itemView.findViewById(R.id.item_list_title);
-            mTextViewSub = (TextView) itemView.findViewById(R.id.item_list_title_sub);
         }
 
         @Override

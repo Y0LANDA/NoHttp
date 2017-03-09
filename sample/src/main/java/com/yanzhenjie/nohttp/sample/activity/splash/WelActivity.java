@@ -15,29 +15,68 @@
  */
 package com.yanzhenjie.nohttp.sample.activity.splash;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 
 import com.yanzhenjie.nohttp.sample.R;
-import com.yanzhenjie.nohttp.sample.activity.StartActivity;
-import com.yolanda.nohttp.PosterHandler;
+import com.yanzhenjie.nohttp.sample.activity.MainActivity;
+import com.yanzhenjie.nohttp.sample.config.AppConfig;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.nohttp.HandlerDelivery;
+
+import java.util.List;
 
 /**
  * Created by Yan Zhenjie on 2016/10/16.
  */
-public class WelActivity extends Activity {
+public class WelActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wel);
-        PosterHandler.getInstance().postDelayed(new Runnable() {
+
+        if (AndPermission.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            AppConfig.getInstance().initialize();
+            goMain(3000);
+        } else
+            AndPermission.with(this)
+                    .requestCode(100)
+                    .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .send();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, new PermissionListener() {
             @Override
-            public void run() {
-                startActivity(new Intent(WelActivity.this, StartActivity.class));
+            public void onSucceed(int requestCode, List<String> grantPermissions) {
+                AppConfig.getInstance().initialize();
+                goMain(1000);
+            }
+
+            @Override
+            public void onFailed(int requestCode, List<String> deniedPermissions) {
                 finish();
             }
-        }, 3000);
+        });
+    }
+
+    private void goMain(int time) {
+        HandlerDelivery.getInstance().postDelayed(() -> {
+            Intent intent = new Intent(WelActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }, time);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return true;
     }
 }

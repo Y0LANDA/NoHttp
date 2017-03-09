@@ -1,152 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yanzhenjie.nohttp.sample">
+<!--
+    Copyright 2017 Yan Zhenjie
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.yanzhenjie.nohttp.sample">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:name=".Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme.Common">
+        android:theme="@style/AppTheme.Main">
         <activity
             android:name=".activity.splash.SplashActivity"
-            android:theme="@style/AppTheme.Common.Launch">
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.splash.WelActivity"
-            android:theme="@style/AppTheme.Common.Launch" />
+            android:theme="@style/AppTheme.Splash"/>
         <activity
-            android:name=".activity.StartActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Common" />
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Main.Launcher"
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden"/>
         <activity
             android:name=".activity.OriginalActivity"
             android:label="@string/title_original_activity"
-            android:theme="@style/AppTheme.Common" />
-        <activity
-            android:name=".activity.rxjava.RxJavaActivity"
-            android:label="@string/title_rxjava_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.MethodActivity"
             android:label="@string/title_method_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.ImageActivity"
             android:label="@string/title_image_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.json.JsonActivity"
             android:label="@string/title_json_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.PostBodyActivity"
             android:label="@string/title_post_body_activity"
-            android:theme="@style/AppTheme.Common"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+            android:theme="@style/AppTheme.Main"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
         <activity
             android:name=".activity.define.DefineRequestActivity"
             android:label="@string/title_define_request_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cache.CacheActivity"
             android:label="@string/title_cache_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cache.CacheHttpActivity"
             android:label="@string/title_cache_http_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cache.CacheRequestFailedReadCacheActivity"
             android:label="@string/title_cache_request_failed_read_cache_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cache.CacheNoneCacheRequestNetWorkActivity"
             android:label="@string/title_cache_none_request_network_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cache.CacheOnlyReadCacheActivity"
             android:label="@string/title_cache_only_read_cache"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cache.CacheOnlyRequestNetworkActivity"
             android:label="@string/title_cache_only_request_network"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.RedirectActivity"
             android:label="@string/title_redirect_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.upload.UploadFileActivity"
             android:label="@string/title_upload_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.upload.UploadSingleFileActivity"
             android:label="@string/title_upload_single_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.upload.UploadMultiFileActivity"
             android:label="@string/title_upload_multi_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.upload.UploadFileListActivity"
             android:label="@string/title_upload_file_list_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.upload.UploadAlbumActivity"
             android:label="@string/title_upload_album"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.download.DownloadActivity"
             android:label="@string/title_download_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
-            android:name=".activity.download.DownloadSignleFileActivity"
+            android:name=".activity.download.DownloadSingleFileActivity"
             android:label="@string/title_download_single_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.download.DownloadFileListActivity"
             android:label="@string/title_download_list_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cancel.CancelActivity"
             android:label="@string/title_cancel_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cancel.CancelLinkageActivity"
             android:label="@string/title_cancel_linkage_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cancel.CancelSignActivity"
             android:label="@string/title_cancel_sign_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.cancel.CancelAllActivity"
             android:label="@string/title_cancel_all_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.SyncActivity"
             android:label="@string/title_sync_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.ProXYActivity"
             android:label="@string/title_proxy_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
         <activity
             android:name=".activity.HttpsActivity"
             android:label="@string/title_https_activity"
-            android:theme="@style/AppTheme.Common" />
+            android:theme="@style/AppTheme.Main"/>
     </application>
 
 </manifest>

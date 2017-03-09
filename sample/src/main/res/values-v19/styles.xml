@@ -1,7 +1,0 @@
-<resources>
-
-    <style name="AppTheme.Common">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-</resources>

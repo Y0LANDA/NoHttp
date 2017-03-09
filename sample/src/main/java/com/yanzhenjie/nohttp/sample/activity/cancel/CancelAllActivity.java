@@ -19,11 +19,10 @@ import android.os.Bundle;
 
 import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.activity.BaseActivity;
-import com.yanzhenjie.nohttp.sample.nohttp.CallServer;
 import com.yanzhenjie.nohttp.sample.util.Constants;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
 
 /**
  * <p>取消所有请求。</p>
@@ -38,13 +37,13 @@ public class CancelAllActivity extends BaseActivity {
         setContentView(R.layout.activity_cacel_demo);
 
         // 请求1。
-        Request<String> request1 = NoHttp.createStringRequest(Constants.URL_NOHTTP_TEST, RequestMethod.GET);
+        Request<String> request1 = NoHttp.createStringRequest(Constants.URL_NOHTTP_JSONOBJECT, RequestMethod.GET);
 
         // 请求2。
-        Request<String> request2 = NoHttp.createStringRequest(Constants.URL_NOHTTP_TEST, RequestMethod.GET);
+        Request<String> request2 = NoHttp.createStringRequest(Constants.URL_NOHTTP_JSONOBJECT, RequestMethod.GET);
 
         // 请求3。
-        Request<String> request3 = NoHttp.createStringRequest(Constants.URL_NOHTTP_TEST, RequestMethod.GET);
+        Request<String> request3 = NoHttp.createStringRequest(Constants.URL_NOHTTP_JSONOBJECT, RequestMethod.GET);
 
         /**
          * 这里假设有很多请求被添加到队列，不止是一个Activity中的。
@@ -60,6 +59,6 @@ public class CancelAllActivity extends BaseActivity {
         /**
          * 在一个合适的时机，调用队列的cancelAll就会取消所有的请求，包括正在执行的。
          */
-        CallServer.getRequestInstance().cancelAll();
+        cancelAll();
     }
 }

@@ -1,16 +1,18 @@
-apply plugin: 'com.android.library'
+apply plugin: rootProject.ext.plugin.library
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 24
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
     }
 }
 
 dependencies {
-    compile 'com.yolanda.nohttp:nohttp:1.1.0'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
+    compile rootProject.ext.dependencies.nohttp
+    compile rootProject.ext.dependencies.okhttpUrl
 }
+
+apply from: "maven.gradle"

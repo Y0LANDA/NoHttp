@@ -24,15 +24,19 @@ import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
 import com.yanzhenjie.nohttp.sample.util.Snackbar;
-import com.yolanda.nohttp.Logger;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
-import com.yolanda.nohttp.tools.IOUtils;
+import com.yanzhenjie.nohttp.Logger;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.tools.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * <p>提交Json到服务器。</p>
@@ -40,18 +44,18 @@ import java.io.InputStream;
  *
  * @author Yan Zhenjie;
  */
-public class PostBodyActivity extends BaseActivity implements View.OnClickListener {
+public class PostBodyActivity extends BaseActivity {
 
     /**
      * 要提交的数据。
      */
-    private EditText mEdtPostBody;
+    @BindView(R.id.edt_post_body)
+    EditText mEdtPostBody;
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_post_body);
-        mEdtPostBody = (EditText) findViewById(R.id.edt_post_body);
-        findView(R.id.btn_start).setOnClickListener(this);
+        ButterKnife.bind(this);
 
         try {
             InputStream inputStream = getAssets().open("json");
@@ -62,7 +66,7 @@ public class PostBodyActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    @Override
+    @OnClick(R.id.btn_start)
     public void onClick(View v) {
         if (v.getId() == R.id.btn_start) {
             pushBody();
@@ -78,6 +82,8 @@ public class PostBodyActivity extends BaseActivity implements View.OnClickListen
          * 1. 请求方法一定是POST、PUT等可以直接写流出去的方法。
          */
         Request<String> request = NoHttp.createStringRequest(Constants.URL_NOHTTP_POSTBODY, RequestMethod.POST);
+        request.add("name", "yanzhenjie");
+        request.add("pwd", 123);
 
         /**
          * 下面就是怎么setBody，几种方法，根据自己的需要选择：

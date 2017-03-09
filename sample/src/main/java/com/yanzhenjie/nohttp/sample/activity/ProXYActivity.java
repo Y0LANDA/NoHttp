@@ -20,12 +20,15 @@ import android.view.View;
 
 import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * <p>通过代理服务器访问。</p>
@@ -33,16 +36,15 @@ import java.net.Proxy;
  *
  * @author Yan Zhenjie.
  */
-public class ProXYActivity extends BaseActivity implements View.OnClickListener, HttpListener<String> {
+public class ProXYActivity extends BaseActivity implements HttpListener<String> {
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_proxy);
-
-        findView(R.id.btn_start).setOnClickListener(this);
+        ButterKnife.bind(this);
     }
 
-    @Override
+    @OnClick(R.id.btn_start)
     public void onClick(View v) {
         // 本来百度需要重定向，这里直接代理到百度的IP上，应该不需要重定向了。
         Request<String> request = NoHttp.createStringRequest("http://www.baidu.com");

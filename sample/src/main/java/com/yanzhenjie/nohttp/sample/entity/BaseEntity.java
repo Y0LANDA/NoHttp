@@ -22,9 +22,6 @@ import com.alibaba.fastjson.annotation.JSONField;
  */
 public class BaseEntity {
 
-    @JSONField(name = "method")
-    private String method;
-
     @JSONField(name = "error")
     private int error;
 
@@ -34,18 +31,9 @@ public class BaseEntity {
     public BaseEntity() {
     }
 
-    public BaseEntity(String method, int error, String url) {
-        this.method = method;
+    public BaseEntity(int error, String url) {
         this.error = error;
         this.url = url;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
     }
 
     public int getError() {

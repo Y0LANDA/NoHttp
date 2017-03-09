@@ -25,13 +25,15 @@ import com.yanzhenjie.nohttp.sample.adapter.RecyclerListSingleAdapter;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
 import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 /**
  * <p>请求图片.</p>
@@ -47,7 +49,7 @@ public class ImageActivity extends BaseActivity implements HttpListener<Bitmap> 
 
         List<String> imageItems = Arrays.asList(getResources().getStringArray(R.array.activity_image_item));
         RecyclerListSingleAdapter listAdapter = new RecyclerListSingleAdapter(imageItems, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_image_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_image_activity);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(listAdapter);
     }

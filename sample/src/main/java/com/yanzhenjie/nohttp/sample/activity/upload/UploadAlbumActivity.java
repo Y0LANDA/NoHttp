@@ -15,12 +15,14 @@
  */
 package com.yanzhenjie.nohttp.sample.activity.upload;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,15 +34,22 @@ import com.yanzhenjie.nohttp.sample.activity.BaseActivity;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
 import com.yanzhenjie.nohttp.sample.util.Snackbar;
-import com.yolanda.nohttp.FileBinary;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.OnUploadListener;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
-import com.yolanda.nohttp.tools.ImageLocalLoader;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.nohttp.FileBinary;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.OnUploadListener;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.tools.ImageLocalLoader;
 
 import java.io.File;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * <p>从相册选择图片上传。</p>
@@ -58,7 +67,8 @@ public class UploadAlbumActivity extends BaseActivity {
     /**
      * 展示选择的头像。
      */
-    private ImageView mIvIcon;
+    @BindView(R.id.iv_icon)
+    ImageView mIvIcon;
     /**
      * 选择的图片路径。
      */
@@ -66,39 +76,60 @@ public class UploadAlbumActivity extends BaseActivity {
     /**
      * 显示状态。
      */
-    private TextView mTvResult;
+    @BindView(R.id.tv_result)
+    TextView mTvResult;
     /**
      * 显示进度。
      */
-    private ProgressBar mProgressBar;
+    @BindView(R.id.pb_progress)
+    ProgressBar mProgressBar;
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_upload_album);
-        findView(R.id.btn_album).setOnClickListener(onClickListener);
-        findView(R.id.btn_start).setOnClickListener(onClickListener);
-
-        mIvIcon = findView(R.id.iv_icon);
-        mTvResult = findView(R.id.tv_result);
-        mProgressBar = findView(R.id.pb_progress);
+        ButterKnife.bind(this);
     }
 
     /**
      * 按钮点击。
      */
-    private View.OnClickListener onClickListener = v -> {
+    @OnClick({R.id.btn_album, R.id.btn_start})
+    public void onClick(View v) {
         if (v.getId() == R.id.btn_album) {
-            selectImageFormAlbum();
+            if (AndPermission.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                selectImageFormAlbum();
+            else
+                AndPermission.with(this)
+                        .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .requestCode(100)
+                        .send();
         } else if (v.getId() == R.id.btn_start) {
             upload();
         }
-    };
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, new PermissionListener() {
+            @Override
+            public void onSucceed(int requestCode, List<String> grantPermissions) {
+                selectImageFormAlbum();
+            }
+
+            @Override
+            public void onFailed(int requestCode, List<String> deniedPermissions) {
+            }
+        });
+    }
 
     /**
      * 选择图片。
      */
     private void selectImageFormAlbum() {
-        Intent picture = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent picture = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media
+                .EXTERNAL_CONTENT_URI);
         startActivityForResult(picture, RESULT_FIRST_USER);
     }
 

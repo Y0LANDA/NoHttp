@@ -23,10 +23,13 @@ import android.view.View;
 import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.dialog.WaitDialog;
 import com.yanzhenjie.nohttp.sample.util.Constants;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * <p>同步请求。</p>
@@ -34,7 +37,7 @@ import com.yolanda.nohttp.rest.Response;
  *
  * @author Yan Zhenjie.
  */
-public class SyncActivity extends BaseActivity implements View.OnClickListener {
+public class SyncActivity extends BaseActivity {
 
     /**
      * 等待的dialog。
@@ -44,8 +47,7 @@ public class SyncActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_sync);
-
-        findView(R.id.btn_start).setOnClickListener(this);
+        ButterKnife.bind(this);
     }
 
     /**
@@ -76,13 +78,16 @@ public class SyncActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
-    @Override
+    @OnClick(R.id.btn_start)
     public void onClick(View v) {
         showDialog();
         new Thread() {
             public void run() {
                 // 在子线程中可以使用同步请求
-                Request<String> request = NoHttp.createStringRequest(Constants.URL_NOHTTP_TEST, RequestMethod.GET);
+                Request<String> request = NoHttp.createStringRequest(Constants.URL_NOHTTP_JSONOBJECT,
+                        RequestMethod.GET);
+                request.add("name", "yanzhenjie");
+                request.add("pwd", 123);
                 Response<String> response = NoHttp.startRequestSync(request);
                 handler.obtainMessage(0, response).sendToTarget();
             }

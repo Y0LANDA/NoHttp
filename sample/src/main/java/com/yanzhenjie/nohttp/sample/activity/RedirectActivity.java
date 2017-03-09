@@ -23,16 +23,18 @@ import com.yanzhenjie.nohttp.sample.adapter.RecyclerListSingleAdapter;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
 import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
-import com.yolanda.nohttp.Headers;
-import com.yolanda.nohttp.IBasicRequest;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RedirectHandler;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.Headers;
+import com.yanzhenjie.nohttp.IBasicRequest;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RedirectHandler;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.ButterKnife;
 
 /**
  * Created in Jan 31, 2016 4:30:31 PM;
@@ -47,7 +49,7 @@ public class RedirectActivity extends BaseActivity implements HttpListener<Strin
 
         List<String> imageItems = Arrays.asList(getResources().getStringArray(R.array.activity_redirect_item));
         RecyclerListSingleAdapter listAdapter = new RecyclerListSingleAdapter(imageItems, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_redirect_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_redirect_activity);
         recyclerView.setAdapter(listAdapter);
     }
 
@@ -75,6 +77,7 @@ public class RedirectActivity extends BaseActivity implements HttpListener<Strin
                 return redirectRequest;
             }
 
+            // 是否不允许重定向。
             @Override
             public boolean isDisallowedRedirect(Headers responseHeaders) {
                 // 返回false表示允许重定向
@@ -108,7 +111,8 @@ public class RedirectActivity extends BaseActivity implements HttpListener<Strin
     @Override
     public void onSucceed(int what, Response<String> response) {
         Headers headers = response.getHeaders();
-        if (headers.getResponseCode() == 302 || headers.getResponseCode() == 301 || headers.getResponseCode() == 307) {
+        if (headers.getResponseCode() == 302 || headers.getResponseCode() == 301 || headers.getResponseCode() ==
+                307) {
             String message = getString(R.string.request_redirect_location);
             message = String.format(Locale.getDefault(), message, headers.getLocation());
             showMessageDialog(R.string.request_succeed, message);

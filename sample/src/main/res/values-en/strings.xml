@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
 <resources>
 
     <string name="app_name">NoHttp Demo</string>
@@ -14,11 +29,9 @@
     <string name="nohttp">NoHttp</string>
     <string name="nohttp_slogan">There are feelings of framework</string>
 
-    <string name="behavior_user_head_move">com.yanzhenjie.nohttp.sample.behavior.AvatarImageBehavior</string>
     <!-- title field -->
 
     <string name="title_original_activity">NoHttp native usage</string>
-    <string name="title_rxjava_activity">NoHttp with rxjava</string>
     <string name="title_method_activity">Demo request agreement</string>
     <string name="title_image_activity">NoHttp request image</string>
     <string name="title_post_body_activity">Post json, custom inclusions</string>
@@ -63,8 +76,9 @@
 
     <string name="request_json_result">Request method: %1$s\nRequest Address: %2$s\nResponse data: %3$s\nBusiness status code：%4$s.</string>
     <string name="request_succeed_head">Request succeed, request method is HEAD, no response body.</string>
-    <string name="request_method_not_allow">The request method was not server allows.</string>
     <string name="request_method_head">Request method for HEAD, no response content.</string>
+    <string name="request_method_patch">Server is not support method.</string>
+    <string name="request_method_not_allow">The requested method only：%1$s</string>
 
     <!-- Json -->
 
@@ -104,7 +118,7 @@
     <string name="download_delete">Delete file</string>
     <string name="delete_succeed">Delte succeed</string>
     <!-- Download status -->
-    <string name="download_progress">Have downloaded: %1$d</string>
+    <string name="download_progress">Have downloaded&#058; %1$d&#037;&#037;, speed&#058; %2$skb&#047;s</string>
     <string name="download_status_pause">Pause</string>
     <string name="download_status_be_pause">Download is suspended</string>
     <string name="download_status_re_download">To download</string>
@@ -131,8 +145,6 @@
     <string name="error_not_found_server">Not found server in the network.</string>
     <string name="error_url_error">URL error.</string>
     <string name="error_not_found_cache">Not found cache.</string>
-    <string name="error_system_unsupport_method">The system unsupport request method.</string>
-    <string name="error_parse_data_error">Parse data error.</string>
     <string name="error_unknow">Unknow error.</string>
     <string name="error_response_code">The server response code %1$d</string>
     <string name="error_response_code_dex">The server response code %1$d，If your server in this case you can also return data processing.</string>

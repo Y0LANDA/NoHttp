@@ -15,7 +15,9 @@
  */
 package com.yanzhenjie.nohttp.sample.activity.upload;
 
+import android.Manifest;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
@@ -26,15 +28,21 @@ import com.yanzhenjie.nohttp.sample.activity.BaseActivity;
 import com.yanzhenjie.nohttp.sample.config.AppConfig;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
-import com.yolanda.nohttp.BasicBinary;
-import com.yolanda.nohttp.FileBinary;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.OnUploadListener;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.nohttp.BasicBinary;
+import com.yanzhenjie.nohttp.FileBinary;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.OnUploadListener;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 import java.io.File;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * <p>上传单个文件。</p>
@@ -52,18 +60,19 @@ public class UploadSingleFileActivity extends BaseActivity {
     /**
      * 文件的上传状态。
      */
-    private TextView mTvResult;
+    @BindView(R.id.tv_result)
+    TextView mTvResult;
     /**
      * 进度条。
      */
-    private ProgressBar mPbProgress;
+    @BindView(R.id.pb_progress)
+    ProgressBar mPbProgress;
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_upload_single);
-        findView(R.id.rv_upload_file_single_root).setClickable(true);
-        mTvResult = findView(R.id.tv_result);
-        mPbProgress = findView(R.id.pb_progress);
+        ButterKnife.bind(this);
+        ButterKnife.findById(this, R.id.rv_upload_file_single_root).setClickable(true);
     }
 
     /**
@@ -146,9 +155,30 @@ public class UploadSingleFileActivity extends BaseActivity {
     @Override
     protected boolean onOptionsItemSelectedCompat(MenuItem item) {
         if (item.getItemId() == R.id.menu_upload_file_request) {
-            uploadSingleFile();
+            if (AndPermission.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                uploadSingleFile();
+            else
+                AndPermission.with(this)
+                        .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        .requestCode(100)
+                        .send();
         }
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, new PermissionListener() {
+            @Override
+            public void onSucceed(int requestCode, List<String> grantPermissions) {
+                uploadSingleFile();
+            }
+
+            @Override
+            public void onFailed(int requestCode, List<String> deniedPermissions) {
+            }
+        });
+    }
 }

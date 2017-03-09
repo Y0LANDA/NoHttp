@@ -32,8 +32,8 @@ public class YanZhenjie extends BaseEntity {
         this.data = data;
     }
 
-    public YanZhenjie(String method, int error, String url, UserInfo data) {
-        super(method, error, url);
+    public YanZhenjie(int error, String url, UserInfo data) {
+        super(error, url);
         this.data = data;
     }
 
@@ -47,17 +47,14 @@ public class YanZhenjie extends BaseEntity {
 
     @Override
     public String toString() {
-        return new StringBuilder("Url: ")
-                .append(getUrl())
-                .append("\r\nMethod: ")
-                .append(getMethod())
-                .append("\r\nErrorCode: ")
-                .append(getError())
-                .append("\r\nYanZhenjie: ")
-                .append("\n    WebSite: ")
-                .append(getData().getWebsite())
-                .append("\n    Blog: ")
-                .append(getData().getBlog())
-                .toString();
+        return "Url: " +
+                getUrl() +
+                "\r\nErrorCode: " +
+                getError() +
+                "\r\nYanZhenjie: " +
+                "\n    WebSite: " +
+                getData().getWebsite() +
+                "\n    Blog: " +
+                getData().getBlog();
     }
 }

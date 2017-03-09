@@ -24,13 +24,17 @@ import com.yanzhenjie.nohttp.sample.entity.ListItem;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
 import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import butterknife.BindArray;
+import butterknife.ButterKnife;
 
 /**
  * <p>演示各种请求方法Demo.<p>
@@ -40,19 +44,24 @@ import java.util.List;
  */
 public class MethodActivity extends BaseActivity {
 
+    @BindArray(R.array.activity_method_item)
+    String[] titles;
+
+    @BindArray(R.array.activity_method_item_des)
+    String[] titlesDes;
+
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_method);
+        ButterKnife.bind(this);
 
         List<ListItem> listItems = new ArrayList<>();
-        String[] titles = getResources().getStringArray(R.array.activity_method_item);
-        String[] titlesDes = getResources().getStringArray(R.array.activity_method_item_des);
         for (int i = 0; i < titles.length; i++) {
             listItems.add(new ListItem(titles[i], titlesDes[i]));
         }
 
         RecyclerListMultiAdapter listAdapter = new RecyclerListMultiAdapter(listItems, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_method_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_method_activity);
         recyclerView.setAdapter(listAdapter);
     }
 
@@ -96,8 +105,8 @@ public class MethodActivity extends BaseActivity {
         }
 
         if (request != null) {
-            request.add("userName", "yolanda");// String类型
-            request.add("userPass", "yolanda.pass");
+            request.add("name", "yanzhenjie");// String类型
+            request.add("pwd", 123);
             request.add("userAge", 20);// int类型
             request.add("userSex", '1');// char类型，还支持其它类型
 
@@ -110,13 +119,19 @@ public class MethodActivity extends BaseActivity {
 
         @Override
         public void onSucceed(int what, Response<String> response) {
-            int responseCode = response.getHeaders().getResponseCode();// 服务器响应码
-            if (responseCode == 200) {
-                if (RequestMethod.HEAD == response.request().getRequestMethod())// 请求方法为HEAD时没有响应内容
-                    showMessageDialog(R.string.request_succeed, R.string.request_method_head);
-                else
-                    showMessageDialog(R.string.request_succeed, response.get());
-            }
+            if (response.getHeaders().getResponseCode() == 501) {
+                showMessageDialog(R.string.request_succeed, R.string.request_method_patch);
+            } else if (RequestMethod.HEAD == response.request().getRequestMethod())// 请求方法为HEAD时没有响应内容
+                showMessageDialog(R.string.request_succeed, R.string.request_method_head);
+            else if (response.getHeaders().getResponseCode() == 405) {
+                List<String> allowList = response.getHeaders().getValues("Allow");
+                String allow = getString(R.string.request_method_not_allow);
+                if (allowList != null && allowList.size() > 0) {
+                    allow = String.format(Locale.getDefault(), allow, allowList.get(0));
+                }
+                showMessageDialog(R.string.request_succeed, allow);
+            } else
+                showMessageDialog(R.string.request_succeed, response.get());
         }
 
         @Override

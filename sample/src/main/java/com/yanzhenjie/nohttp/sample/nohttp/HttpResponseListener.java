@@ -16,24 +16,19 @@
 package com.yanzhenjie.nohttp.sample.nohttp;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 
 import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.dialog.WaitDialog;
 import com.yanzhenjie.nohttp.sample.util.Toast;
-import com.yolanda.nohttp.Logger;
-import com.yolanda.nohttp.error.NetworkError;
-import com.yolanda.nohttp.error.NotFoundCacheError;
-import com.yolanda.nohttp.error.ParseError;
-import com.yolanda.nohttp.error.TimeoutError;
-import com.yolanda.nohttp.error.URLError;
-import com.yolanda.nohttp.error.UnKnownHostError;
-import com.yolanda.nohttp.rest.OnResponseListener;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
-import com.yolanda.nohttp.rest.RestResponse;
-
-import java.net.ProtocolException;
+import com.yanzhenjie.nohttp.Logger;
+import com.yanzhenjie.nohttp.error.NetworkError;
+import com.yanzhenjie.nohttp.error.NotFoundCacheError;
+import com.yanzhenjie.nohttp.error.TimeoutError;
+import com.yanzhenjie.nohttp.error.URLError;
+import com.yanzhenjie.nohttp.error.UnKnownHostError;
+import com.yanzhenjie.nohttp.rest.OnResponseListener;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 /**
  * Created in Nov 4, 2015 12:02:55 PM.
@@ -63,18 +58,14 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
      * @param canCancel    是否允许用户取消请求.
      * @param isLoading    是否显示dialog.
      */
-    public HttpResponseListener(Activity activity, Request<?> request, HttpListener<T> httpCallback, boolean canCancel, boolean isLoading) {
+    public HttpResponseListener(Activity activity, Request<?> request, HttpListener<T> httpCallback, boolean
+            canCancel, boolean isLoading) {
         this.mActivity = activity;
         this.mRequest = request;
         if (activity != null && isLoading) {
             mWaitDialog = new WaitDialog(activity);
             mWaitDialog.setCancelable(canCancel);
-            mWaitDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    mRequest.cancel();
-                }
-            });
+            mWaitDialog.setOnCancelListener(dialog -> mRequest.cancel());
         }
         this.callback = httpCallback;
     }
@@ -106,18 +97,7 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
             // 这里判断一下http响应码，这个响应码问下你们的服务端你们的状态有几种，一般是200成功。
             // w3c标准http响应码：http://www.w3school.com.cn/tags/html_ref_httpmessages.asp
 
-            int coce = response.responseCode();
-            if (coce == 200 || coce == 304) { // 如果使用http标准的304重定向到缓存的话，还要判断下304状态码。
-                callback.onSucceed(what, response);
-            } else { // 如果
-                Response<T> error = new RestResponse<>(response.request(),
-                        response.isFromCache(),
-                        response.getHeaders(),
-                        null,
-                        response.getNetworkMillis(),
-                        new ParseError("数据错误")); // 这里可以传一个你的自定义异常。
-                onFailed(what, error); // 去让错误的回调处理。
-            }
+            callback.onSucceed(what, response);
         }
     }
 
@@ -138,10 +118,6 @@ public class HttpResponseListener<T> implements OnResponseListener<T> {
         } else if (exception instanceof NotFoundCacheError) {
             // 这个异常只会在仅仅查找缓存时没有找到缓存时返回
             Toast.show(mActivity, R.string.error_not_found_cache);
-        } else if (exception instanceof ProtocolException) {
-            Toast.show(mActivity, R.string.error_system_unsupport_method);
-        } else if (exception instanceof ParseError) {
-            Toast.show(mActivity, R.string.error_parse_data_error);
         } else {
             Toast.show(mActivity, R.string.error_unknow);
         }

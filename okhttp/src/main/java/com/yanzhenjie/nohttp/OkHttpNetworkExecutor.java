@@ -15,13 +15,6 @@
  */
 package com.yanzhenjie.nohttp;
 
-import com.yolanda.nohttp.Headers;
-import com.yolanda.nohttp.IBasicRequest;
-import com.yolanda.nohttp.Logger;
-import com.yolanda.nohttp.Network;
-import com.yolanda.nohttp.NetworkExecutor;
-import com.yolanda.nohttp.URLConnectionNetworkExecutor;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -80,6 +73,6 @@ public class OkHttpNetworkExecutor implements NetworkExecutor {
         }
         // 5. Connect
         connection.connect();
-        return new URLConnectionNetworkExecutor.DefaultNetwork(connection);
+        return new OkHttpNetwork(connection);
     }
 }

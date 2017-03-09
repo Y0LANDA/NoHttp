@@ -1,9 +1,11 @@
-*.iml
+/.idea/
+/.gradle/
 /build/
+/captures/
+
+*.iml
 /local.properties
 
 /sample/build
 /nohttp/build
-/okhttp/build/
-/.idea/
-/.gradle/
+/okhttp/build

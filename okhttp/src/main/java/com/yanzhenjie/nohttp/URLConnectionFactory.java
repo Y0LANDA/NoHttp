@@ -48,7 +48,7 @@ public class URLConnectionFactory implements Cloneable {
 
     private OkHttpClient mClient;
 
-    private URLConnectionFactory(OkHttpClient client) {
+    public URLConnectionFactory(OkHttpClient client) {
         this.mClient = client;
     }
 

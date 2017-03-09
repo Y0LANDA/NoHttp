@@ -15,8 +15,6 @@
  */
 package com.yanzhenjie.nohttp.sample.util;
 
-import com.yanzhenjie.nohttp.sample.config.AppConfig;
-
 /**
  * Created in Jan 29, 2016 9:25:18 AM.
  *
@@ -27,23 +25,8 @@ public class Constants {
     /**
      * 服务器地址.
      */
-    public static final String SERVER;
+    public static final String SERVER = "http://api.nohttp.net/";
 
-    /**
-     * 正式时使用新浪sae托管; 测试使用本地, 节省SAE的消费.
-     */
-    static {
-        if (AppConfig.DEBUG) {
-            SERVER = "http://192.168.1.226/HttpServer/";
-        } else {
-            SERVER = "http://api.nohttp.net/";
-        }
-    }
-
-    /**
-     * 测试接口。
-     */
-    public static final String URL_NOHTTP_TEST = SERVER + "test";
     /**
      * 各种方法测试。
      */
@@ -93,10 +76,10 @@ public class Constants {
      * 下载文件。
      */
     public static final String[] URL_DOWNLOADS = {
-            "http://gdown.baidu.com/data/wisegame/4f45d1baacb6ee7f/baidushoujizhushouyuan91zhu_16789458.apk",
-            "http://gdown.baidu.com/data/wisegame/2eeee3831c9dbc42/QQ_374.apk",
-            "http://gdown.baidu.com/data/wisegame/8d5889f722f640c8/weixin_800.apk",
-            "http://gdown.baidu.com/data/wisegame/4c77c9e0020562ca/baidushipin_1072201074.apk"
+            "http://api.nohttp.net/download/1.apk",
+            "http://api.nohttp.net/download/2.apk",
+            "http://api.nohttp.net/download/3.apk",
+            "http://api.nohttp.net/download/4.apk"
     };
 
 }

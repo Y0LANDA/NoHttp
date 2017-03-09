@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 
 import com.yanzhenjie.nohttp.sample.Application;
 import com.yanzhenjie.nohttp.sample.util.FileUtil;
+import com.yanzhenjie.nohttp.tools.IOUtils;
 
 import java.io.File;
 
@@ -35,11 +36,6 @@ public class AppConfig {
     private SharedPreferences preferences;
 
     /**
-     * 是否是测试环境.
-     */
-    public static final boolean DEBUG = false;
-
-    /**
      * App根目录.
      */
     public String APP_PATH_ROOT;
@@ -47,14 +43,21 @@ public class AppConfig {
     private AppConfig() {
         preferences = Application.getInstance().getSharedPreferences("nohttp_sample", Context.MODE_PRIVATE);
 
-        APP_PATH_ROOT = FileUtil.getRootPath().getAbsolutePath() + File.separator + "NoHttpSample";
-        FileUtil.initDirectory(APP_PATH_ROOT);
+        APP_PATH_ROOT = FileUtil.getRootPath(Application.getInstance()).getAbsolutePath() + File.separator +
+                "NoHttpSample";
     }
 
     public static AppConfig getInstance() {
         if (appConfig == null)
-            appConfig = new AppConfig();
+            synchronized (AppConfig.class) {
+                if (appConfig == null)
+                    appConfig = new AppConfig();
+            }
         return appConfig;
+    }
+
+    public void initialize() {
+        IOUtils.createFolder(APP_PATH_ROOT);
     }
 
     public void putInt(String key, int value) {

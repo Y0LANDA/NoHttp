@@ -23,40 +23,46 @@ import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.activity.BaseActivity;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created in Jan 31, 2016 10:16:26 PM.
  *
  * @author Yan Zhenjie.
  */
-public class JsonActivity extends BaseActivity implements View.OnClickListener {
+public class JsonActivity extends BaseActivity {
 
-    private TextView mTvResult;
+    @BindView(R.id.tv_result)
+    TextView mTvResult;
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_json);
-
-        findView(R.id.btn_object_reqeust).setOnClickListener(this);
-        findView(R.id.btn_array_request).setOnClickListener(this);
-        mTvResult = findView(R.id.tv_result);
+        ButterKnife.bind(this);
     }
 
-    @Override
+    @OnClick({R.id.btn_object_reqeust, R.id.btn_array_request})
     public void onClick(View v) {
         if (v.getId() == R.id.btn_object_reqeust) {
             Request<JSONObject> request = NoHttp.createJsonObjectRequest(Constants.URL_NOHTTP_JSONOBJECT);
+            request.add("name", "yanzhenjie");
+            request.add("pwd", 123);
             request(0, request, objectListener, true, true);
         } else if (v.getId() == R.id.btn_array_request) {
             Request<JSONArray> request = NoHttp.createJsonArrayRequest(Constants.URL_NOHTTP_JSONARRAY);
+            request.add("name", "yanzhenjie");
+            request.add("pwd", 123);
             request(1, request, arrayListener, true, true);
         }
     }
@@ -65,9 +71,11 @@ public class JsonActivity extends BaseActivity implements View.OnClickListener {
         @Override
         public void onSucceed(int what, Response<JSONObject> response) {
             JSONObject jsonObject = response.get();
-            if (0 == jsonObject.optInt("error", -1)) {
+            if (1 == jsonObject.optInt("error", -1)) {
                 String result = getString(R.string.request_json_result);
-                result = String.format(Locale.getDefault(), result, response.request().getRequestMethod().toString(), jsonObject.optString("url"), jsonObject.optString("data"), jsonObject.optString("error"));
+                result = String.format(Locale.getDefault(), result, response.request().getRequestMethod()
+                        .toString(), jsonObject.optString("url"), jsonObject.optString("data"), jsonObject
+                        .optString("error"));
                 mTvResult.setText(result);
             }
         }

@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
 <resources>
 
     <string name="app_name">NoHttp演示</string>
@@ -12,14 +27,11 @@
     <string name="wel_hint_3">反正你也不能来打我</string>
 
     <string name="nohttp">NoHttp</string>
-    <string name="nohttp_slogan">一个有情怀的网络框架</string>
-
-    <string name="behavior_user_head_move">com.yanzhenjie.nohttp.sample.behavior.AvatarImageBehavior</string>
+    <string name="nohttp_slogan">让你的网络请求更简单</string>
 
     <!-- title field -->
 
     <string name="title_original_activity">NoHttp原始用法</string>
-    <string name="title_rxjava_activity">RxNoHttp，与RxJava配合使用</string>
     <string name="title_method_activity">各种请求协议演示</string>
     <string name="title_image_activity">NoHttp请求图片</string>
     <string name="title_post_body_activity">POST一段JSON、自定包体</string>
@@ -64,8 +76,9 @@
 
     <string name="request_json_result">请求方法：%1$s\n请求地址：%2$s\n响应数据：%3$s\n业务状态码：%4$s。</string>
     <string name="request_succeed_head">请求成功, 请求方式为HEAD, 没有响应内容。</string>
-    <string name="request_method_not_allow">请求的方法被不服务器允许。</string>
     <string name="request_method_head">请求方法为HEAD，没有响应内容。</string>
+    <string name="request_method_patch">服务器不支持的请求方法。</string>
+    <string name="request_method_not_allow">服务器仅仅支持请求方法：%1$s</string>
 
     <!-- Json -->
 
@@ -105,7 +118,7 @@
     <string name="download_delete">删除文件</string>
     <string name="delete_succeed">删除成功</string>
     <!-- Download status -->
-    <string name="download_progress">已下载：%1$d</string>
+    <string name="download_progress">已下载：%1$d&#037;&#037;，速度：%2$skb&#047;s</string>
     <string name="download_status_pause">暂停</string>
     <string name="download_status_be_pause">下载被暂停</string>
     <string name="download_status_re_download">重新下载</string>
@@ -132,8 +145,6 @@
     <string name="error_not_found_server">未发现指定服务器，清切换网络后重试。</string>
     <string name="error_url_error">URL错误。</string>
     <string name="error_not_found_cache">没有找到缓存.</string>
-    <string name="error_system_unsupport_method">系统不支持的请求方法。</string>
-    <string name="error_parse_data_error">解析数据时发生错误。</string>
     <string name="error_unknow">未知错误。</string>
     <string name="error_response_code">服务器响应码%1$d</string>
     <string name="error_response_code_dex">服务器响应码%1$d，如果你们服务器在这种情况下也返回数据你可以处理。</string>

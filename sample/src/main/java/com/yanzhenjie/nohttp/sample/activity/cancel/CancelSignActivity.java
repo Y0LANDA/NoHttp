@@ -19,11 +19,10 @@ import android.os.Bundle;
 
 import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.activity.BaseActivity;
-import com.yanzhenjie.nohttp.sample.nohttp.CallServer;
 import com.yanzhenjie.nohttp.sample.util.Constants;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.RequestMethod;
-import com.yolanda.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.Request;
 
 /**
  * <p>根据sign取消某几个请求。</p>
@@ -43,15 +42,15 @@ public class CancelSignActivity extends BaseActivity {
         setContentView(R.layout.activity_cacel_demo);
 
         // 请求1。
-        Request<String> request1 = NoHttp.createStringRequest(Constants.URL_NOHTTP_TEST, RequestMethod.GET);
+        Request<String> request1 = NoHttp.createStringRequest(Constants.URL_NOHTTP_JSONOBJECT, RequestMethod.GET);
         request1.setCancelSign(cancelSign);
 
         // 请求2。
-        Request<String> request2 = NoHttp.createStringRequest(Constants.URL_NOHTTP_TEST, RequestMethod.GET);
+        Request<String> request2 = NoHttp.createStringRequest(Constants.URL_NOHTTP_JSONOBJECT, RequestMethod.GET);
         request2.setCancelSign(cancelSign);
 
         // 请求3。
-        Request<String> request3 = NoHttp.createStringRequest(Constants.URL_NOHTTP_TEST, RequestMethod.GET);
+        Request<String> request3 = NoHttp.createStringRequest(Constants.URL_NOHTTP_JSONOBJECT, RequestMethod.GET);
         request3.setCancelSign(cancelSign);
 
         /**
@@ -75,6 +74,6 @@ public class CancelSignActivity extends BaseActivity {
          *
          * 特别注意：有人把"123"这种字符串穿进去，取消的时候又了"123"字符串，这样就不是同一个对象了，不能成功的取消请求。
          */
-        CallServer.getRequestInstance().cancelBySign(cancelSign);
+        cancelBySign(cancelSign);
     }
 }

@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
 <resources>
 
     <string-array name="activity_start_items">
         <item>0. The use of the most primitive</item>
-        <item>With RxJava</item>
         <item>1. Demo request agreement</item>
         <item>2. Request images</item>
         <item>3. Request Json(JsonObject, Array…)</item>
@@ -21,7 +35,6 @@
 
     <string-array name="activity_start_items_des">
         <item>The most basic method of use, if I don\'t want to use the Demo of encapsulation, want to encapsulate the original use of developers look here.</item>
-        <item>With RxJava demo</item>
         <item>Http request protocol,: GET, POST, PUT, HEAD, DELETE, PATCH, TRANCE…</item>
         <item>The use of ImageRequest, Supports multiple request protocol, can carry cookies, request header, parameters, file transfer, etc…</item>
         <item>With Android\'s built-in JSONObject parsing. FastJson, Gson, XML etc and if necessary. Please see the request object.</item>

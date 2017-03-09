@@ -1,12 +1,14 @@
 ![NoHttp Logo](http://www.nohttp.net/image/nohttp_logo.svg)  
 
-1. NoHttp详细文档：[http://doc.nohttp.net](http://doc.nohttp.net)  
+支持与`RxJava`完美结合、支持一句话切换底层为`OkHttp`，支持缓存数据到数据库或SD卡（缓存数据自动加密）支持请求Restful风格的接口，比Retrofit更简单易用。  
 
-2. NoHttp公益测试接口：[http://api.nohttp.net](http://api.nohttp.net)  
+**NoHttp使用文档：[doc.nohttp.net](http://doc.nohttp.net)**  
+**NoHttp测试接口：[api.nohttp.net](http://api.nohttp.net)**  
+**欢迎加入QQ技术交流群：[46523908](https://jq.qq.com/?_wv=1027&k=44uOijU)**  
 
-支持与`RxJava`完美结合、支持一句话切换底层为`OkHttp`，支持缓存数据到数据库或SD卡，支持请求Restful风格的接口，比Retrofit更简单易用。  
+**[查阅NoHttp升级日志](https://github.com/yanzhenjie/NoHttp/blob/master/UPGRADE.md)**
 
-**欢迎加入QQ技术交流群：[46523908](http://jq.qq.com/?_wv=1027&k=40hvC7E)**
+Demo中用的6.0权限管理友链：[https://github.com/yanzhenjie/AndPermission](https://github.com/yanzhenjie/AndPermission)
 
 ----
 
@@ -31,20 +33,17 @@
 - [代码混淆](#代码混淆)  
 
 ## 效果预览
-<image src="https://github.com/yanzhenjie/NoHttp/blob/master/image/1.gif?raw=true" width="280px"/>  <image src="https://github.com/yanzhenjie/NoHttp/blob/master/image/2.gif?raw=true" width="280px"/>  
-
-<image src="https://github.com/yanzhenjie/NoHttp/blob/master/image/3.gif?raw=true" width="280px"/>  <image src="https://github.com/yanzhenjie/NoHttp/blob/master/image/4.gif?raw=true" width="280px"/>
+<image src="https://github.com/yanzhenjie/NoHttp/blob/master/image/1.gif?raw=true" width="200px"/>  <image src="https://github.com/yanzhenjie/NoHttp/blob/master/image/2.gif?raw=true" width="200px"/>
 
 ## 框架特性
 比Retrofit使用更简单、更易用。
 
-* 动态配置底层框架为**OkHttp**、HttpURLConnection
-* 与**RxJava**完美结合，支持异步请求、支持同步请求
+* 动态配置底层框架为OkHttp、HttpURLConnection
+* 与RxJava完美结合，支持异步请求、支持同步请求
 * 多文件上传，支持大文件上传，表单提交数据
 * 文件下载、上传下载、上传和下载的进度回调、错误回调
 * 支持Json、xml、Map、List的提交
 * 完美的Http缓存模式，可指定缓存到数据库、SD卡，缓存数据已安全加密
- * 在6.0以上手机缓存到SD卡时需要请求运行时权限：[AndPermission](https://github.com/yanzhenjie/AndPermission)
 * 自定义Request，直接请求JsonObject、JavaBean等
 * Cookie的自动维持，App重启、关开机后还持续维持
 * http 301 302 303 304 307重定向，支持多层嵌套重定向
@@ -55,27 +54,21 @@
 * 支持取消某个请求、取消指定多个请求、取消所有请求
 
 ## 使用方法
-### AndroidStudio使用方式
-* 如果使用HttpURLConnection作为网络层：  
+### Gradle
+* 如果使用HttpURLConnection作为网络层：
 ```groovy
-compile 'com.yolanda.nohttp:nohttp:1.1.0'
+compile 'com.yanzhenjie.nohttp:nohttp:1.1.1'
 ```
-* 如果要使用OkHttp作为网络层，请再依赖：  
+* 如果要使用OkHttp作为网络层，请再依赖：
 ```groovy
-compile 'com.yanzhenjie.nohttp:okhttp:1.1.0'
+compile 'com.yanzhenjie.nohttp:okhttp:1.1.1'
 ```
 
-### Eclipse使用方式
-* 如果使用HttpURLConnection作为网络层：  
- - [下载nohttp jar包](https://github.com/yanzhenjie/NoHttp/blob/master/Jar/nohttp1.1.0.jar?raw=true)
-* 如果使用OkHttp做为网络层
- - [下载nohttp jar包](https://github.com/yanzhenjie/NoHttp/blob/master/Jar/nohttp1.1.0.jar?raw=true)：nohttp原生jar。
- - [下载nohttp-okhttp jar包](https://github.com/yanzhenjie/NoHttp/blob/master/Jar/nohttp-okhttp1.1.0.jar?raw=true)：nohttp和okhttp过渡，只有两个类。
- - [下载okhttp jar包](https://github.com/yanzhenjie/NoHttp/blob/master/Jar/okhttp-3.4.1.jar?raw=true)：okhttp原生jar。
- - [下载okhttp-url jar包](https://github.com/yanzhenjie/NoHttp/blob/master/Jar/okhttp-urlconnection-3.4.1.jar?raw=true)：okhttp和URLConnection的过度。
- - [下载okio jar包](https://github.com/yanzhenjie/NoHttp/blob/master/Jar/okio-1.11.0.jar?raw=true)：okio的包。
+> 新版NoHttp修改了包名为`com.yanzhenjie.nohttp`，开发者从旧版升级后请使用全局替换，将`com.yolanda.nohttp`替换为`com.yanzhenjie.nohttp`即可。
 
-* 好多jar啊，所以强烈的999次方建议没有使用`AndroidStudio`的同学赶紧切换过来。
+### Eclipse ADT
+1. 放弃治疗。  
+2. 自行下载上方jar包。  
 
 ## 初始化
 NoHttp初始化需要一个Context，最好在`Application`的`onCreate()`中初始化，记得在`manifest.xml`中注册`Application`。
@@ -88,7 +81,7 @@ NoHttp.initialize(this);
 
 ### 高级自定义初始化
 
-* 超时配置，默认10s
+* 配置超时毫秒数，默认10 * 1000ms
 ```java
 NoHttp.initialize(this, new NoHttp.Config()
     // 设置全局连接超时时间，单位毫秒
@@ -98,17 +91,14 @@ NoHttp.initialize(this, new NoHttp.Config()
 );
 ```
 
-* 配置缓存，默认保存在数据库
+* 配置缓存，控制开关
 ```java
 NoHttp.initialize(this, new NoHttp.Config()
     ...
-    // 保存到数据库
     .setCacheStore(
+        // 保存到数据库
         new DBCacheStore(this).setEnable(true) // 如果不使用缓存，设置false禁用。
-    )
-    // 或者保存到SD卡
-    .setCacheStore(
-        new DiskCacheStore(this)
+        // 或者保存到SD卡：new DiskCacheStore(this)
     )
 );
 ```
@@ -117,7 +107,7 @@ NoHttp.initialize(this, new NoHttp.Config()
 ```java
 NoHttp.initialize(this, new NoHttp.Config()
     ...
-    // 默认保存数据库DBCookieStore，开发者可以自己实现。
+    // 默认保存数据库DBCookieStore，开发者也可以自己实现CookieStore接口。
     .setCookieStore(
         new DBCookieStore(this).setEnable(false) // 如果不维护cookie，设置false禁用。
     )
@@ -130,8 +120,8 @@ NoHttp.initialize(this, new NoHttp.Config()
     ...
     // 使用HttpURLConnection
     .setNetworkExecutor(new URLConnectionNetworkExecutor())
-    // 使用OkHttp
-    .setNetworkExecutor(new OkHttpNetworkExecutor())
+    // 或者使用OkHttp
+    // .setNetworkExecutor(new OkHttpNetworkExecutor())
 );
 ```
 
@@ -155,17 +145,19 @@ Logger.setTag("NoHttpSample");// 设置NoHttp打印Log的tag。
 
 ##第三方异步框架
 **RxJava**
-可以与RxJava、RxAndroid、RxBus、EventBus等第三方异步任务框架完美结合使用，这里在demo中给出了和RxJava一起使用的代码。具体的封装请参考Demo的RxNoHttp。
-```java
-Request<UserInfo> request = new JavaBeanRequest<>(url, UserInfo.class);
-RxNoHttp.request(this, request, new SimpleSubscriber<Response<UserInfo>>() {
-    @Override
-    public void onNext(Response<YanZhenjie> entityResponse) {
-        // 直接拿到实体对象
-        UserInfo userInfo = entiryResponse.get();
-    }
-});
+其实核心就是集合`RxJava`的异步功能和`NoHttp`的同步功能：
 ```
+Request<String> request = NoHttp.createStringRequest(url, RequestMethod.DELETE);
+Response<String> response = NoHttp.startRequestSync(request);
+if (response.isSucceed()) {
+    // 请求成功
+} else {
+    // 请求失败
+}
+```
+把上面的代码利用`RxJava`封装起来就OK了，这两个项目可以作为参考：
+1. [NoHttpUtil](https://git.oschina.net/ysb/NoHttpUtil)  
+2. [NohttpRxUtils](https://github.com/LiqiNew/NohttpRxUtils)  
 
 ## 请求队列
 ```java
@@ -399,8 +391,8 @@ private DownloadListener downloadListener = new DownloadListener() {
 	}
 
 	@Override
-	public void onProgress(int what, int progress, long downCount) {
-		// 更新下载进度
+	public void onProgress(int what, int progress, long downCount, long speed) {
+		// 更新下载进度和下载网速
 	}
 
  	@Override
@@ -518,14 +510,14 @@ NoHttp设计到兼容高版本系统的api采用反射调用，所以所有类�
 
 * 原生NoHttp混淆
 ```text
--dontwarn com.yolanda.nohttp.**
--keep class com.yolanda.nohttp.**{*;}
+-dontwarn com.yanzhenjie.nohttp.**
+-keep class com.yanzhenjie.nohttp.**{*;}
 ```
 * 如果使用okhttp的版本
 ```text
 // nohttp
--dontwarn com.yolanda.nohttp.**
--keep class com.yolanda.nohttp.**{*;}
+-dontwarn com.yanzhenjie.nohttp.**
+-keep class com.yanzhenjie.nohttp.**{*;}
 
 // nohttp-okhttp
 -dontwarn com.yanzhenjie.nohttp.**
@@ -537,7 +529,7 @@ NoHttp设计到兼容高版本系统的api采用反射调用，所以所有类�
 -dontwarn okio.**
 -keep class okio.** { *;} 
 ```
- 
+
 ## 关于我
 ![微信二维码](http://img.blog.csdn.net/20161020083048694)
 

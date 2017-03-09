@@ -26,6 +26,9 @@ import com.yanzhenjie.nohttp.sample.entity.LoadFile;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * <p>文件列表适配器。</p>
  * Created on 2016/5/31.
@@ -45,7 +48,8 @@ public class LoadFileAdapter extends BaseAdapter<LoadFileAdapter.DownloadFileVie
 
     @Override
     public DownloadFileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new DownloadFileViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_file_status, parent, false));
+        return new DownloadFileViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout
+                .item_load_file_status, parent, false));
     }
 
     @Override
@@ -57,17 +61,18 @@ public class LoadFileAdapter extends BaseAdapter<LoadFileAdapter.DownloadFileVie
         /**
          * 文件状态。
          */
-        private TextView mTvResult;
+        @BindView(R.id.tv_result)
+        TextView mTvResult;
         /**
          * 文件进度。
          */
-        private ProgressBar mPbProgress;
+        @BindView(R.id.pb_progress)
+        ProgressBar mPbProgress;
 
         public DownloadFileViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-            mTvResult = (TextView) itemView.findViewById(R.id.tv_result);
-            mPbProgress = (ProgressBar) itemView.findViewById(R.id.pb_progress);
         }
 
         @Override
@@ -79,7 +84,6 @@ public class LoadFileAdapter extends BaseAdapter<LoadFileAdapter.DownloadFileVie
 
         @Override
         public void onClick(View v) {
-
         }
     }
 

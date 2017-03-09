@@ -27,6 +27,8 @@ import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.ButterKnife;
+
 /**
  * <p>演示怎么取消请求。</p>
  * Created in Oct 23, 2015 1:13:06 PM.
@@ -41,32 +43,30 @@ public class CancelActivity extends BaseActivity {
 
         List<String> imageItems = Arrays.asList(getResources().getStringArray(R.array.activity_cancel_item));
         RecyclerListSingleAdapter listAdapter = new RecyclerListSingleAdapter(imageItems, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_cancel_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_cancel_activity);
         recyclerView.setAdapter(listAdapter);
     }
 
     /**
      * list item单击。
      */
-    private OnItemClickListener mItemClickListener = (v, position) -> geOtherPager(position);
-
-    private void geOtherPager(int position) {
+    private OnItemClickListener mItemClickListener = (v, position) -> {
         Intent intent = null;
         switch (position) {
             case 0:// 和Activity声明周日联动。
-                intent = new Intent(this, CancelLinkageActivity.class);
+                intent = new Intent(CancelActivity.this, CancelLinkageActivity.class);
                 break;
             case 1:// 根据sign取消队列中某几个请求。
-                intent = new Intent(this, CancelSignActivity.class);
+                intent = new Intent(CancelActivity.this, CancelSignActivity.class);
                 break;
             case 2:// 取消队列中所有请求。
-                intent = new Intent(this, CancelAllActivity.class);
+                intent = new Intent(CancelActivity.this, CancelAllActivity.class);
                 break;
             default:
                 break;
         }
         if (intent != null)
             startActivity(intent);
-    }
+    };
 
 }

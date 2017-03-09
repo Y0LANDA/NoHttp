@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MatchParent"
     android:background="@color/colorPrimary"
     android:gravity="center"
@@ -9,18 +25,18 @@
         style="@style/WrapContent"
         android:text="@string/wel_hint_1"
         android:textColor="@color/white"
-        android:textSize="@dimen/wel_hint_1" />
+        android:textSize="@dimen/wel_hint_1"/>
 
     <TextView
         style="@style/WrapContent"
         android:layout_marginTop="@dimen/dp_10"
         android:text="@string/wel_hint_3"
         android:textColor="@color/white"
-        android:textSize="@dimen/wel_hint_3" />
+        android:textSize="@dimen/wel_hint_3"/>
 
     <ImageView
         style="@style/WrapContent"
         android:scaleType="center"
-        android:src="@mipmap/group_logo" />
+        android:src="@mipmap/group_logo"/>
 
 </LinearLayout>

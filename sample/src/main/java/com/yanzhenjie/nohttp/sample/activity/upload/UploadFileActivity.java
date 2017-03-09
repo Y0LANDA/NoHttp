@@ -15,10 +15,12 @@
  */
 package com.yanzhenjie.nohttp.sample.activity.upload;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
 import com.yanzhenjie.nohttp.sample.R;
@@ -26,14 +28,18 @@ import com.yanzhenjie.nohttp.sample.activity.BaseActivity;
 import com.yanzhenjie.nohttp.sample.adapter.RecyclerListSingleAdapter;
 import com.yanzhenjie.nohttp.sample.config.AppConfig;
 import com.yanzhenjie.nohttp.sample.dialog.WaitDialog;
-import com.yanzhenjie.nohttp.sample.util.FileUtil;
 import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
-import com.yolanda.nohttp.tools.IOUtils;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.nohttp.tools.IOUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 /**
  * <p>
@@ -51,10 +57,34 @@ public class UploadFileActivity extends BaseActivity {
 
         List<String> imageItems = Arrays.asList(getResources().getStringArray(R.array.activity_upload_item));
         RecyclerListSingleAdapter listAdapter = new RecyclerListSingleAdapter(imageItems, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_upload_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_upload_activity);
         recyclerView.setAdapter(listAdapter);
 
-        saveFile();
+        if (AndPermission.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+            saveFile();
+        else
+            AndPermission.with(this)
+                    .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .requestCode(100)
+                    .send();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AndPermission.onRequestPermissionsResult(requestCode, permissions, grantResults, new PermissionListener() {
+            @Override
+            public void onSucceed(int requestCode, List<String> grantPermissions) {
+                AppConfig.getInstance().initialize();
+                saveFile();
+            }
+
+            @Override
+            public void onFailed(int requestCode, List<String> deniedPermissions) {
+                finish();
+            }
+        });
     }
 
     private OnItemClickListener mItemClickListener = (v, position) -> {
@@ -87,25 +117,30 @@ public class UploadFileActivity extends BaseActivity {
         }
     };
 
-    private Runnable saveFileThread = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                InputStream inputStream = getAssets().open("123.jpg");
-                FileUtil.saveFile(inputStream, AppConfig.getInstance().APP_PATH_ROOT + File.separator + "image1.jpg");
-                IOUtils.closeQuietly(inputStream);
+    private Runnable saveFileThread = () -> {
+        try {
+            AppConfig.getInstance().initialize();
 
-                inputStream = getAssets().open("234.jpg");
-                FileUtil.saveFile(inputStream, AppConfig.getInstance().APP_PATH_ROOT + File.separator + "image2.jpg");
-                IOUtils.closeQuietly(inputStream);
+            InputStream inputStream = getAssets().open("123.jpg");
+            IOUtils.write(inputStream, new FileOutputStream(AppConfig.getInstance().APP_PATH_ROOT + File
+                    .separator +
+                    "image1.jpg"));
+            IOUtils.closeQuietly(inputStream);
 
-                inputStream = getAssets().open("456.png");
-                FileUtil.saveFile(inputStream, AppConfig.getInstance().APP_PATH_ROOT + File.separator + "image3.png");
-                IOUtils.closeQuietly(inputStream);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            handler.obtainMessage().sendToTarget();
+            inputStream = getAssets().open("234.jpg");
+            IOUtils.write(inputStream, new FileOutputStream(AppConfig.getInstance().APP_PATH_ROOT + File
+                    .separator +
+                    "image2.jpg"));
+            IOUtils.closeQuietly(inputStream);
+
+            inputStream = getAssets().open("456.png");
+            IOUtils.write(inputStream, new FileOutputStream(AppConfig.getInstance().APP_PATH_ROOT + File
+                    .separator +
+                    "image3.png"));
+            IOUtils.closeQuietly(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        handler.obtainMessage().sendToTarget();
     };
 }

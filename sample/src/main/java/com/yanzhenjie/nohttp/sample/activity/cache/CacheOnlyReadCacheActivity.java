@@ -26,14 +26,16 @@ import com.yanzhenjie.nohttp.sample.adapter.RecyclerListSingleAdapter;
 import com.yanzhenjie.nohttp.sample.nohttp.HttpListener;
 import com.yanzhenjie.nohttp.sample.util.Constants;
 import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
-import com.yolanda.nohttp.NoHttp;
-import com.yolanda.nohttp.error.NotFoundCacheError;
-import com.yolanda.nohttp.rest.CacheMode;
-import com.yolanda.nohttp.rest.Request;
-import com.yolanda.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.error.NotFoundCacheError;
+import com.yanzhenjie.nohttp.rest.CacheMode;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
 
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 /**
  * <p>仅仅读取缓存。</p>
@@ -49,7 +51,7 @@ public class CacheOnlyReadCacheActivity extends BaseActivity {
 
         List<String> cacheDataTypes = Arrays.asList(getResources().getStringArray(R.array.activity_cache_item));
         RecyclerListSingleAdapter listAdapter = new RecyclerListSingleAdapter(cacheDataTypes, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_cache_demo_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_cache_demo_activity);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(listAdapter);
     }
@@ -67,15 +69,19 @@ public class CacheOnlyReadCacheActivity extends BaseActivity {
      */
     private void requestString() {
         Request<String> request = NoHttp.createStringRequest(Constants.URL_NOHTTP_CACHE_STRING);
-        request.setCacheKey("CacheKeyRequestNetworkFailedReadCacheString");// 这里的key是缓存数据的主键，默认是url，使用的时候要保证全局唯一，否则会被其他相同url数据覆盖。
-        request.setCacheMode(CacheMode.ONLY_READ_CACHE);//ONLY_READ_CACHE表示仅仅读取缓存，无论如何都不会请求网络。
+        request.add("name", "yanzhenjie")
+                .add("pwd", 123);
+        request.setCacheKey("CacheKeyRequestNetworkFailedReadCacheString")
+                // 这里的key是缓存数据的主键，默认是url，使用的时候要保证全局唯一，否则会被其他相同url数据覆盖。
+                .setCacheMode(CacheMode.ONLY_READ_CACHE);//ONLY_READ_CACHE表示仅仅读取缓存，无论如何都不会请求网络。
         request(0, request, stringHttpListener, false, true);
     }
 
     private HttpListener<String> stringHttpListener = new HttpListener<String>() {
         @Override
         public void onSucceed(int what, Response<String> response) {
-            String string = response.isFromCache() ? getString(R.string.request_from_cache) : getString(R.string.request_from_network);
+            String string = response.isFromCache() ? getString(R.string.request_from_cache) : getString(R.string
+                    .request_from_network);
             showMessageDialog(string, response.get());
         }
 
@@ -94,7 +100,8 @@ public class CacheOnlyReadCacheActivity extends BaseActivity {
      */
     private void requestImage() {
         Request<Bitmap> request = NoHttp.createImageRequest(Constants.URL_NOHTTP_CACHE_IMAGE);
-        request.setCacheKey("CacheKeyRequestNetworkFailedReadCacheImage");// 这里的key是缓存数据的主键，默认是url，使用的时候要保证全局唯一，否则会被其他相同url数据覆盖。
+        request.setCacheKey("CacheKeyRequestNetworkFailedReadCacheImage");//
+        // 这里的key是缓存数据的主键，默认是url，使用的时候要保证全局唯一，否则会被其他相同url数据覆盖。
         request.setCacheMode(CacheMode.ONLY_READ_CACHE);//ONLY_READ_CACHE表示仅仅读取缓存，无论如何都不会请求网络。
         request(0, request, imageHttpListener, false, true);
     }
@@ -102,7 +109,8 @@ public class CacheOnlyReadCacheActivity extends BaseActivity {
     private HttpListener<Bitmap> imageHttpListener = new HttpListener<Bitmap>() {
         @Override
         public void onSucceed(int what, Response<Bitmap> response) {
-            String string = response.isFromCache() ? getString(R.string.request_from_cache) : getString(R.string.request_from_network);
+            String string = response.isFromCache() ? getString(R.string.request_from_cache) : getString(R.string
+                    .request_from_network);
             showImageDialog(string, response.get());
         }
 

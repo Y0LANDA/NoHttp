@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<!--
+    Copyright 2017 Yan Zhenjie
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<resources>
     <string-array name="activity_start_items">
         <item>0. 最原始使用方法</item>
-        <item>RxNoHttp ==> 与RxJava完美结合</item>
         <item>1. 请求协议演示</item>
         <item>2. 请求图片</item>
         <item>3. 请求Json(JsonObject, Array…)</item>
@@ -21,7 +34,6 @@
 
     <string-array name="activity_start_items_des">
         <item>NoHttp最基本的使用方法，如果不想用我Demo的封装，想自己封装的开发者看这里的最原始用法…</item>
-        <item>与RxJava配合使用demo</item>
         <item>Http请求协议：\nGET、POST、PUT、DELETE…</item>
         <item>ImageRequest的使用，支持多种请求协议，可以携带Cookie、请求头、参数、传文件等…</item>
         <item>用Android自带的JSONObject解析，如果需要FastJson、Gson、XML等请看自定请求对象。</item>

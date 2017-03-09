@@ -18,7 +18,6 @@ package com.yanzhenjie.nohttp.sample.activity.cache;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.yanzhenjie.nohttp.sample.R;
 import com.yanzhenjie.nohttp.sample.activity.BaseActivity;
@@ -28,6 +27,8 @@ import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Yan Zhenjie on 2016/3/13.
@@ -48,16 +49,14 @@ public class CacheActivity extends BaseActivity {
         }
 
         RecyclerListMultiAdapter listAdapter = new RecyclerListMultiAdapter(listItems, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_cache_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_cache_activity);
         recyclerView.setAdapter(listAdapter);
     }
 
     /**
      * list item单击。
      */
-    private OnItemClickListener mItemClickListener = (v, position) -> goItemPager(position);
-
-    private void goItemPager(int position) {
+    private OnItemClickListener mItemClickListener = (v, position) -> {
         Intent intent = null;
         switch (position) {
             case 0:// Http标准协议的缓存。
@@ -80,5 +79,5 @@ public class CacheActivity extends BaseActivity {
         }
         if (intent != null)
             startActivity(intent);
-    }
+    };
 }

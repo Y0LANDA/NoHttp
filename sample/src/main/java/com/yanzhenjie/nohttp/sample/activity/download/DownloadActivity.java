@@ -27,6 +27,8 @@ import com.yanzhenjie.nohttp.sample.util.OnItemClickListener;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.ButterKnife;
+
 /**
  * <p>下载件demo.</p>
  * Created in Oct 10, 2015 12:58:25 PM.
@@ -42,7 +44,7 @@ public class DownloadActivity extends BaseActivity {
         List<String> listItems = Arrays.asList(getResources().getStringArray(R.array.activity_download_item));
 
         RecyclerListSingleAdapter listAdapter = new RecyclerListSingleAdapter(listItems, mItemClickListener);
-        RecyclerView recyclerView = findView(R.id.rv_download_activity);
+        RecyclerView recyclerView = ButterKnife.findById(this, R.id.rv_download_activity);
         recyclerView.setAdapter(listAdapter);
     }
 
@@ -51,7 +53,7 @@ public class DownloadActivity extends BaseActivity {
      */
     private OnItemClickListener mItemClickListener = (v, position) -> {
         if (position == 0) {// 下载单个文件
-            startActivity(new Intent(DownloadActivity.this, DownloadSignleFileActivity.class));
+            startActivity(new Intent(DownloadActivity.this, DownloadSingleFileActivity.class));
         } else if (position == 1) {// 下载多个文件
             startActivity(new Intent(DownloadActivity.this, DownloadFileListActivity.class));
         }

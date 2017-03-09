@@ -1,48 +1,45 @@
-apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: rootProject.ext.plugin.application
+apply plugin: rootProject.ext.plugin.retrolambda
+apply plugin: rootProject.ext.plugin.butterknife
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.yanzhenjie.nohttp.sample"
-        minSdkVersion 9
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
-    }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.android.support:cardview-v7:24.2.1'
-    // nohttp 相关库
-    // {
-         compile 'com.yolanda.nohttp:nohttp:1.1.0'
-         // 如果要使用okhttp作为nohttp底层，请再依赖下面的库，记得与nohttp保持版本的一致
-         // compile 'com.yanzhenjie.nohttp:okhttp:1.1.0'
-    // }
+    compile rootProject.ext.dependencies.nohttp
+    compile rootProject.ext.dependencies.okhttp
 
-    // json
-    compile 'com.alibaba:fastjson:1.1.54.android'
-    // circle image
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    // rx
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.1'
+    // support.
+    compile rootProject.ext.dependencies.appcompat
+    compile rootProject.ext.dependencies.design
+    compile rootProject.ext.dependencies.recyclerview
+    compile rootProject.ext.dependencies.cardview
+
+    // json parser.
+    compile rootProject.ext.dependencies.fastjson
+
+    // circle image.
+    compile rootProject.ext.dependencies.circleimageview
+
+    // permission manager.
+    compile rootProject.ext.dependencies.permisson
+
+    // view bind
+    apt rootProject.ext.dependencies.butterknifeapt
+    compile rootProject.ext.dependencies.butterknife
 }
