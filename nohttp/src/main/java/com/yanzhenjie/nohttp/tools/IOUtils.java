@@ -413,7 +413,7 @@ public class IOUtils {
             //noinspection ResultOfMethodCallIgnored
             targetFolder.delete();
         }
-        return targetFolder.mkdirs();
+        return targetFolder.mkdirs() || targetFolder.isDirectory();
     }
 
     /**
