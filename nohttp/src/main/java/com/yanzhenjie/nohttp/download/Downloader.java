@@ -51,6 +51,8 @@ import java.net.UnknownHostException;
  * File downloader.
  * </p>
  * Created by YanZhenjie on Jul 31, 2015 9:11:55 AM.
+ *
+ * modify zhangnn on  2018-1-31-21:55
  */
 public class Downloader {
 
@@ -126,7 +128,7 @@ public class Downloader {
         return fileName;
     }
 
-    public void download(int what, DownloadRequest request, DownloadListener downloadListener) {
+    public void download(int what, DownloadRequest request, DownloadListener downloadListener,IDownloadRequestListener downloadRequestListener) {
         validateParam(request, downloadListener);
 
         Connection connection = null;
@@ -218,9 +220,11 @@ public class Downloader {
                     }
                 } else if (responseCode == 304) {
                     int httpContentLength = responseHeaders.getContentLength();
+                    downloadRequestListener.onStart(what);
                     downloadListener.onStart(what, true, httpContentLength, responseHeaders, httpContentLength);
                     downloadListener.onProgress(what, 100, httpContentLength, 0);
                     Logger.d("-------Download finish-------");
+                    downloadRequestListener.onFinish(what);
                     downloadListener.onFinish(what, savePathDir + File.separator + fileName);
                     return;
                 } else { // such as: 200.
@@ -234,9 +238,11 @@ public class Downloader {
                     if (request.isDeleteOld())
                         IOUtils.delFileOrFolder(lastFile);
                     else {
+                        downloadRequestListener.onStart(what);
                         downloadListener.onStart(what, true, lastFile.length(), responseHeaders, lastFile.length());
                         downloadListener.onProgress(what, 100, lastFile.length(), 0);
                         Logger.d("-------Download finish-------");
+                        downloadRequestListener.onFinish(what);
                         downloadListener.onFinish(what, lastFile.getAbsolutePath());
                         return;
                     }
@@ -259,6 +265,7 @@ public class Downloader {
 
                 // 通知开始下载了。
                 Logger.d("-------Download start-------");
+                downloadRequestListener.onStart(what);
                 downloadListener.onStart(what, rangeSize > 0, rangeSize, responseHeaders, contentLength);
 
                 randomAccessFile = new RandomAccessFile(tempFile, "rws");
@@ -325,17 +332,21 @@ public class Downloader {
                     //noinspection ResultOfMethodCallIgnored
                     tempFile.renameTo(lastFile);
                     Logger.d("-------Download finish-------");
+                    downloadRequestListener.onFinish(what);
                     downloadListener.onFinish(what, lastFile.getAbsolutePath());
                 }
             }
         } catch (MalformedURLException e) {
             Logger.e(e);
+            downloadRequestListener.onError(what);
             downloadListener.onDownloadError(what, new URLError(e.getMessage()));
         } catch (UnknownHostException e) {
             Logger.e(e);
+            downloadRequestListener.onError(what);
             downloadListener.onDownloadError(what, new UnKnownHostError(e.getMessage()));
         } catch (SocketTimeoutException e) {
             Logger.e(e);
+            downloadRequestListener.onError(what);
             downloadListener.onDownloadError(what, new TimeoutError(e.getMessage()));
         } catch (IOException e) {
             Exception newException = e;
@@ -346,12 +357,14 @@ public class Downloader {
             else if (IOUtils.getDirSize(savePathDir) < 1024)
                 newException = new StorageSpaceNotEnoughError("The folder is not enough space to save the downloaded file: " + savePathDir + ".");
             Logger.e(newException);
+            downloadRequestListener.onError(what);
             downloadListener.onDownloadError(what, newException);
         } catch (Exception e) {// NetworkError | ServerError | StorageCantWriteError | StorageSpaceNotEnoughError
             if (!NetUtils.isNetworkAvailable())
                 e = new NetworkError("Network is not available, please check network and permission: " +
                         "INTERNET, ACCESS_WIFI_STATE, ACCESS_NETWORK_STATE.");
             Logger.e(e);
+            downloadRequestListener.onError(what);
             downloadListener.onDownloadError(what, e);
         } finally {
             Logger.i("----------Response End----------");

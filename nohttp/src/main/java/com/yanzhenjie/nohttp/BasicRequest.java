@@ -139,6 +139,7 @@ public class BasicRequest<T extends BasicRequest> implements Comparable<BasicReq
      * Cancel sign.
      */
     private Object mCancelSign;
+
     /**
      * Tag of handle.
      */
@@ -1120,11 +1121,20 @@ public class BasicRequest<T extends BasicRequest> implements Comparable<BasicReq
     }
 
     /**
-     * Set tag of task, At the end of the task is returned to you.
+     * Set tag of task, you can use this mTag cancel this request ,
+     * but this tag should uniqueness,
+     * At the end of the task is returned to you.
      */
     public T setTag(Object tag) {
         this.mTag = tag;
         return (T) this;
+    }
+
+    /**
+     * @return mTag
+     */
+    public Object getmTag() {
+        return mTag;
     }
 
     /**

@@ -29,17 +29,21 @@ import java.util.concurrent.BlockingQueue;
  * Created in Oct 21, 2015 2:46:23 PM.
  *
  * @author Yan Zhenjie.
+ *
+ * modify zhangnn on  2018-1-31-21:55
  */
 class DownloadDispatcher extends Thread {
 
     private final BlockingQueue<DownloadRequest> mRequestQueue;
     private final Map<DownloadRequest, Messenger> mMessengerMap;
+    private final IDownloadRequestListener downloadRequestListener;
 
     private boolean mQuit = false;
 
-    public DownloadDispatcher(BlockingQueue<DownloadRequest> requestQueue, Map<DownloadRequest, Messenger> messengerMap) {
+    public DownloadDispatcher(BlockingQueue<DownloadRequest> requestQueue, Map<DownloadRequest, Messenger> messengerMap,IDownloadRequestListener downloadRequestListener) {
         this.mRequestQueue = requestQueue;
         this.mMessengerMap = messengerMap;
+        this.downloadRequestListener = downloadRequestListener;
     }
 
     /**
@@ -71,7 +75,7 @@ class DownloadDispatcher extends Thread {
             }
 
             request.start();
-            SyncDownloadExecutor.INSTANCE.execute(0, request, new ListenerDelegate(request, mMessengerMap));
+            SyncDownloadExecutor.INSTANCE.execute(0, request, new ListenerDelegate(request, mMessengerMap),downloadRequestListener);
             request.finish();
 
             // remove it from queue.

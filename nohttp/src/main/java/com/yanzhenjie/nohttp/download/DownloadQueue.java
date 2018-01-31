@@ -15,6 +15,8 @@
  */
 package com.yanzhenjie.nohttp.download;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -28,12 +30,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created in Oct 21, 2015 2:44:19 PM.
  *
  * @author Yan Zhenjie.
+ *
+ * modify zhangnn on  2018-1-31-21:55
  */
-public class DownloadQueue {
+public class DownloadQueue implements IDownloadRequestListener {
 
     private AtomicInteger mInteger = new AtomicInteger();
     private final BlockingQueue<DownloadRequest> mRequestQueue = new PriorityBlockingQueue<>();
     private final Map<DownloadRequest, Messenger> mMessengerMap = new LinkedHashMap<>();
+    private final Map<Integer, DownloadRequest> mRequestMap = new HashMap<>();
 
     private DownloadDispatcher[] mDispatchers;
 
@@ -54,7 +59,7 @@ public class DownloadQueue {
     public void start() {
         stop();
         for (int i = 0; i < mDispatchers.length; i++) {
-            DownloadDispatcher networkDispatcher = new DownloadDispatcher(mRequestQueue, mMessengerMap);
+            DownloadDispatcher networkDispatcher = new DownloadDispatcher(mRequestQueue, mMessengerMap, this);
             mDispatchers[i] = networkDispatcher;
             networkDispatcher.start();
         }
@@ -72,6 +77,7 @@ public class DownloadQueue {
         request.setSequence(mInteger.incrementAndGet());
         mMessengerMap.put(request, Messenger.newInstance(what, downloadListener));
         mRequestQueue.add(request);
+        mRequestMap.put(what, request);
     }
 
     /**
@@ -99,13 +105,24 @@ public class DownloadQueue {
      * @param sign this sign will be the same as sign's DownloadRequest, and if it is the same, then cancel the task.
      */
     public void cancelBySign(Object sign) {
-        synchronized (mRequestQueue) {
-            for (DownloadRequest request : mRequestQueue) {
-                if (!request.isStarted()) {
-                    mRequestQueue.remove(request);
-                    mMessengerMap.remove(request);
+        if (mRequestMap.isEmpty()) return;
+        //已经开始执行的请求，mRequestQueue会移除该请求，所以只能遍历缓存的请求集合
+        synchronized (mRequestMap) {
+            Iterator<Map.Entry<Integer, DownloadRequest>> iterator = mRequestMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, DownloadRequest> entry = iterator.next();
+                DownloadRequest request = entry.getValue();
+                Object tag = request.getTag();
+                //从缓存集合中找到需要取消的请求，如果请求已经执行，则取消；
+                //如果还没有开始执行，则从执行队列中移除，并从缓存中移除
+                if (tag == sign || (sign != null && tag != null && tag.equals(sign))) {
+                    if (request.isStarted()) {
+                        request.cancel();
+                    } else {
+                        mRequestQueue.remove(request);
+                        mRequestMap.remove(entry.getKey());
+                    }
                 }
-                request.cancelBySign(sign);
             }
         }
     }
@@ -113,16 +130,36 @@ public class DownloadQueue {
     /**
      * Cancel all requests, Already in the execution of the handle can't use this method.
      */
-    public void cancelAll() {
-        synchronized (mRequestQueue) {
-            for (DownloadRequest request : mRequestQueue) {
-                if (!request.isStarted()) {
-                    mRequestQueue.remove(request);
-                    mMessengerMap.remove(request);
+    public synchronized void cancelAll() {
+        //没有分发出去的请求，全部移除
+        if (mRequestQueue.size() > 0) mRequestQueue.clear();
+        //已经分发出去的请求需要取消
+        if (mRequestMap.size() > 0) {
+            for (DownloadRequest request : mRequestMap.values()) {
+                if (request.isStarted()) {
+                    request.cancel();
                 }
-                request.cancel();
             }
+            //剩余的是正在执行的请求，也需要从该列表中移除
+            mRequestMap.clear();
         }
+
     }
 
+    @Override
+    public void onStart(int what) {
+
+    }
+
+    @Override
+    public void onFinish(int what) {
+        //从备份队列中移除
+        mRequestMap.remove(what);
+    }
+
+    @Override
+    public void onError(int what) {
+        //从备份队列中移除
+        mRequestMap.remove(what);
+    }
 }

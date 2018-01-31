@@ -20,6 +20,8 @@ import com.yanzhenjie.nohttp.NoHttp;
 /**
  * <p>Synchronize File Downloader.</p>
  * Created by Yan Zhenjie on 2016/10/12.
+ *
+ * modify zhangnn on  2018-1-31-21:55
  */
 public enum SyncDownloadExecutor {
 
@@ -38,7 +40,7 @@ public enum SyncDownloadExecutor {
      * @param downloadRequest {@link DownloadRequest}.
      * @param listener        accept various download status callback..
      */
-    public void execute(int what, DownloadRequest downloadRequest, DownloadListener listener) {
-        mDownloader.download(what, downloadRequest, listener);
+    public void execute(int what, DownloadRequest downloadRequest, DownloadListener listener,IDownloadRequestListener downloadRequestListener) {
+        mDownloader.download(what, downloadRequest, listener,downloadRequestListener);
     }
 }
