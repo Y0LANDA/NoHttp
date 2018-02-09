@@ -1131,13 +1131,6 @@ public class BasicRequest<T extends BasicRequest> implements Comparable<BasicReq
     }
 
     /**
-     * @return mTag
-     */
-    public Object getmTag() {
-        return mTag;
-    }
-
-    /**
      * Should to return the tag of the object.
      */
     public Object getTag() {
@@ -1242,6 +1235,10 @@ public class BasicRequest<T extends BasicRequest> implements Comparable<BasicReq
     public T setCancelSign(Object sign) {
         this.mCancelSign = sign;
         return (T) this;
+    }
+
+    public Object getCancelSign(){
+        return mCancelSign;
     }
 
     /**

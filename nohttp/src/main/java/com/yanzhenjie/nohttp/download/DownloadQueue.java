@@ -74,10 +74,16 @@ public class DownloadQueue implements IDownloadRequestListener {
      * @param downloadListener download results monitor.
      */
     public void add(int what, DownloadRequest request, DownloadListener downloadListener) {
-        request.setSequence(mInteger.incrementAndGet());
-        mMessengerMap.put(request, Messenger.newInstance(what, downloadListener));
-        mRequestQueue.add(request);
-        mRequestMap.put(what, request);
+        DownloadRequest downloadRequest = mRequestMap.get(what);
+        //从下载页返回上一页面后，再次进入下载页，此时请求已经存在，只需要更新DownloadListener回调，以便刷新页面上的下载进度
+        if (downloadRequest != null) {
+            mMessengerMap.put(downloadRequest, Messenger.newInstance(what, downloadListener));
+        } else {
+            request.setSequence(mInteger.incrementAndGet());
+            mMessengerMap.put(request, Messenger.newInstance(what, downloadListener));
+            mRequestQueue.add(request);
+            mRequestMap.put(what,request);
+        }
     }
 
     /**
@@ -106,24 +112,20 @@ public class DownloadQueue implements IDownloadRequestListener {
      */
     public void cancelBySign(Object sign) {
         if (mRequestMap.isEmpty()) return;
-        //已经开始执行的请求，mRequestQueue会移除该请求，所以只能遍历缓存的请求集合
         synchronized (mRequestMap) {
-            Iterator<Map.Entry<Integer, DownloadRequest>> iterator = mRequestMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, DownloadRequest> entry = iterator.next();
-                DownloadRequest request = entry.getValue();
-                Object tag = request.getTag();
-                //从缓存集合中找到需要取消的请求，如果请求已经执行，则取消；
-                //如果还没有开始执行，则从执行队列中移除，并从缓存中移除
-                if (tag == sign || (sign != null && tag != null && tag.equals(sign))) {
-                    if (request.isStarted()) {
-                        request.cancel();
-                    } else {
-                        mRequestQueue.remove(request);
-                        mRequestMap.remove(entry.getKey());
+            Integer key = null;
+            for (Map.Entry<Integer, DownloadRequest> next : mRequestMap.entrySet()) {
+                Object cancelSign = next.getValue().getCancelSign();
+                if (sign == cancelSign || (cancelSign != null && sign.equals(cancelSign))) {
+                    if (next.getValue().isStarted()) {
+                        //已经执行的请求执行取消请求
+                        next.getValue().cancelBySign(sign);
                     }
+                    key = next.getKey();
+                    break;
                 }
             }
+            mRequestMap.remove(key);
         }
     }
 
@@ -143,7 +145,6 @@ public class DownloadQueue implements IDownloadRequestListener {
             //剩余的是正在执行的请求，也需要从该列表中移除
             mRequestMap.clear();
         }
-
     }
 
     @Override
